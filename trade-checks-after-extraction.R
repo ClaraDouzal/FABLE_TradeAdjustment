@@ -48,7 +48,10 @@ data_deforestation <- data %>%
 
 ggplot(data_deforestation %>% filter(tradeadjustment == "Yes"))+
   geom_line(aes(x = year, y = forestchange, colour = country))+
-  facet_wrap(~pathway)
+  facet_wrap(~pathway)+
+  theme(axis.text.x = element_text(angle = 45, vjust = 0.5, hjust = 0.5),
+        axis.title.x = element_blank())
+  #scale_x_continuous(breaks = c(2000, 2020, 2025, 2035, 2040, 2045, 2050))
 
 
 
