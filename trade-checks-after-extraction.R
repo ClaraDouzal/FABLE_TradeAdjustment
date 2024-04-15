@@ -2,8 +2,7 @@ library(dplyr)
 library(tidyr)
 library(ggplot2)
 
-trade <- read.csv("C:/Users/Clara Douzal/Downloads/240409_commodities.csv") %>% 
-  rename(tradeadjustment = tredeadjustment)
+trade <- read.csv("C:/Users/Clara Douzal/Downloads/240415_commodities.csv") 
 
 df <- trade %>% 
   select(pathway, country, tradeadjustment, product, year, import_quantity, export_quantity) %>% 
@@ -29,13 +28,13 @@ df_all <- trade %>%
   pivot_wider(names_from = tradeadjustment, values_from = c(import_quantity, export_quantity)) %>% 
   mutate(Comp_Import = import_quantity_Yes - import_quantity_No) 
 
-xlsx::write.xlsx(df %>% data.frame(), paste0("C:/Users/Clara Douzal/Downloads/",
-                             gsub("-", "",Sys.Date()),
-                             "_Before_After_TradeAdjustment_ImportComparison.xlsx"),
-           row.names = F)
+# xlsx::write.xlsx(df %>% data.frame(), paste0("C:/Users/Clara Douzal/Downloads/",
+#                              gsub("-", "",Sys.Date()),
+#                              "_Before_After_TradeAdjustment_ImportComparison.xlsx"),
+#            row.names = F)
 
 
-data <- read.csv("C:/Users/Clara Douzal/Downloads/240409_indicators.csv")
+data <- read.csv("C:/Users/Clara Douzal/Downloads/240415_indicators.csv")
 
 df_defor <- data %>% 
   select(pathway, country, tradeadjustment, year, forestchange) %>% 
@@ -44,6 +43,12 @@ df_defor <- data %>%
   mutate(Comparison_Defor_25_20 = `2025` - `2020`,
          Comparison_Defor_30_22 = `2030` - `2025`) 
 
+data_deforestation <- data %>% 
+  select(tradeadjustment, pathway, country, year, forestchange, calcforest)
+
+ggplot(data_deforestation %>% filter(tradeadjustment == "Yes"))+
+  geom_line(aes(x = year, y = forestchange, colour = country))+
+  facet_wrap(~pathway)
 
 
 
