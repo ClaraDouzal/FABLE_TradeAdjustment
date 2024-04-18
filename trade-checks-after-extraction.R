@@ -2,7 +2,7 @@ library(dplyr)
 library(tidyr)
 library(ggplot2)
 
-trade <- read.csv("C:/Users/Clara Douzal/Downloads/240415_commodities.csv") 
+trade <- read.csv("C:/Users/Clara Douzal/Downloads/240418_commodities.csv") 
 
 df <- trade %>% 
   select(pathway, country, tradeadjustment, product, year, import_quantity, export_quantity) %>% 
@@ -34,7 +34,7 @@ df_all <- trade %>%
 #            row.names = F)
 
 
-data <- read.csv("C:/Users/Clara Douzal/Downloads/240415_indicators.csv")
+data <- read.csv("C:/Users/Clara Douzal/Downloads/240418_indicators.csv")
 
 df_defor <- data %>% 
   select(pathway, country, tradeadjustment, year, forestchange) %>% 
@@ -53,15 +53,19 @@ ggplot(data_deforestation %>% filter(tradeadjustment == "Yes"))+
         axis.title.x = element_blank())
   #scale_x_continuous(breaks = c(2000, 2020, 2025, 2035, 2040, 2045, 2050))
 
+ggplot(data_deforestation %>% filter(tradeadjustment == "Yes"))+
+  geom_area(aes(x = year, y = forestchange, fill = country))+
+  facet_wrap(~pathway)+
+  theme(axis.text.x = element_text(angle = 45, vjust = 0.5, hjust = 0.5),
+        axis.title.x = element_blank())
 
-
-for(cur_var in colnames(data %>% select(where(is.numeric)))){
-p <- ggplot(data)+
-  geom_line(aes(x = year, y = get(cur_var),
-                  color = pathway, 
-            linetype = tradeadjustment))+
-              facet_wrap(~country)+
-  ggtitle(cur_var)
-plot(p)
-}
+# for(cur_var in colnames(data %>% select(where(is.numeric)))){
+# p <- ggplot(data)+
+#   geom_line(aes(x = year, y = get(cur_var),
+#                   color = pathway, 
+#             linetype = tradeadjustment))+
+#               facet_wrap(~country)+
+#   ggtitle(cur_var)
+# plot(p)
+# }
 
